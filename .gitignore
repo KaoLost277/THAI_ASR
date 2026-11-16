@@ -1,0 +1,25 @@
+# ThaiASR
+.venv/
+.venv-devcheck/
+__pycache__/
+*.pyc
+
+# PyInstaller / Build artifacts
+build/
+dist/
+
+# Downloaded model files (~2.6 GB)
+models/
+
+# Local settings, recognised text, example clips, crash logs
+config.toml
+history.jsonl
+examples/*.wav
+logs/
+
+# Dev-only scratch
+.vscode/
+.idea/
+*.log
+.pytest_cache/
+

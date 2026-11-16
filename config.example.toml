@@ -1,0 +1,90 @@
+# ThaiASR configuration -- copy to config.toml and edit.
+#
+# Every value here is optional: anything missing falls back to the built-in
+# default, and command-line flags (e.g. --lang, --precision) override the file.
+
+# ---------------------------------------------------------------- hotkeys ----
+# The talk key.
+# Accepted: ctrl_r, ctrl_l, ctrl, alt, shift, space, tab, esc, f1..f24, a-z ...
+hotkey = "ctrl_r"
+# "hold"   = push-to-talk: the app records while the key is held down.
+# "toggle" = tap once to start recording, tap again to stop (nice for long speech).
+hotkey_mode = "hold"
+# Exit the app.
+quit_hotkey = "ctrl+alt+q"
+# Throw away the current recording (only while recording).
+cancel_hotkey = "esc"
+# Show/hide the overlay (same as the "— ย่อ" button on the window itself).
+overlay_hotkey = "ctrl+alt+h"
+
+# ------------------------------------------------------------------ model ----
+# Folder holding encoder.onnx, encoder.onnx.data, decoder_joint.onnx, tokens.txt
+model_dir = "models/openthai2.0-asr-streaming-onnx"
+# "fp32" = most accurate (~2.6 GB, recommended by the model authors)
+# "int8" = smallest (~1.0 GB, faster, slightly less accurate)
+precision = "fp32"
+# "cpu" keeps the install light. "cuda" needs onnxruntime-gpu instead of
+# onnxruntime (see README) and a CUDA 12 runtime.
+device = "cpu"
+# ONNX Runtime threads; 0 = min(8, number of CPUs).
+num_threads = 0
+# Load the model in the background at start-up (a few seconds for fp32).
+preload = true
+# "th-TH" = everything in Thai script; "th-mix" = English words in Latin letters.
+lang = "th-TH"
+# Blank-bias policy: "standard" for dictation, "conversation" for casual speech.
+mode = "standard"
+
+# -------------------------------------------------------------- recording ----
+# Safety stop: recording longer than this ends by itself.
+max_utterance_s = 120.0
+# Utterances shorter than this are reported as "too short" instead of decoded.
+min_utterance_s = 0.3
+# Drop leading/trailing silence before decoding.
+trim_silence = true
+# How long a pause must be for the long-file splitter to cut there.
+min_silence_s = 0.7
+# Anything longer than this is cut at pauses before decoding. This model drops
+# words after a quiet pause when a long stream is fed in one go, so a 20 s
+# utterance with pauses in it must not be decoded as a single stream.
+split_over_s = 12.0
+
+# ------------------------------------------------------- live partial text ---
+# Re-decode while the user is still speaking and show the text so far.
+partials = true
+partial_interval_ms = 700
+# Stop doing that once the utterance gets this long (cost grows with length).
+partial_max_utterance_s = 15.0
+
+# ----------------------------------------------------------------- output ----
+# paste     = copy + Ctrl+V into the focused window (recommended)
+# type      = send Unicode keystrokes
+# clipboard = copy only
+# none      = show it on the overlay only
+output = "paste"
+# Leave the recognised text on the clipboard. Keep this false: if the target app
+# ignores the synthetic Ctrl+V, the text is still there for a manual Ctrl+V.
+# Setting it to true puts the previous clipboard back after pasting.
+restore_clipboard = false
+# How long to wait before restoring the clipboard (only used when the above is true).
+paste_delay_ms = 500
+save_history = true
+history_path = "history.jsonl"
+
+# ------------------------------------------------------- overlay and tray ----
+show_overlay = true
+# Icon in the system tray with a menu (start/stop, hide overlay, hold/toggle,
+# download the model, open logs/config, quit). Needs pystray + pillow.
+tray = true
+# Refuse to start a second copy (it just says "already running").
+single_instance = true
+# Start with the overlay hidden and only the tray icon showing.
+start_minimized = false
+
+[overlay]
+width = 560
+height = 168
+bottom_margin = 90
+opacity = 0.94
+# Clear the result text again after this many seconds (0 = keep it).
+hide_after_s = 6.0

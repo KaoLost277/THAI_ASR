@@ -1,0 +1,10 @@
+# ThaiASR - runtime dependencies (deliberately no torch / no nemo)
+numpy>=1.26,<3
+onnxruntime>=1.18
+sounddevice>=0.4.6
+pynput>=1.7.6
+pyperclip>=1.8.2
+huggingface_hub>=0.24
+# tray icon (optional: the app still runs without it, the overlay just stays)
+pystray>=0.19.5
+pillow>=10.0
